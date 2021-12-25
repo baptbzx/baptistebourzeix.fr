@@ -1,2 +1,0 @@
-# baptistebourzeix.fr
-Personal website
