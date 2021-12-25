@@ -1,0 +1,17 @@
+{
+  "author": "Baptiste Bourzeix <hello@baptistebourzeix.fr> (https://baptistebourzeix.fr/)",
+  "name": "baptistebourzeix-personal-website",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
+  },
+  "dependencies": {
+    "nuxt": "^2.15.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baptbzx/baptistebourzeix.fr.git"
+  }
+}
