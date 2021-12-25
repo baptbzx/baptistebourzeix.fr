@@ -1,5 +1,0 @@
-RewriteEngine on
-
-# Redirect domain to sub-domain www.
-RewriteCond %{HTTP_HOST} ^baptistebourzeix.fr [NC]
-RewriteRule ^(.*)$ https://www.baptistebourzeix.fr/$1 [L,R=301]
