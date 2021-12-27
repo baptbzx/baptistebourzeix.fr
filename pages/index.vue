@@ -1,7 +1,5 @@
 <template>
-  <no-ssr placeholder="loading...">
-    <ThreeMainAnimation />
-  </no-ssr>
+  <ThreeMainAnimation />
 </template>
 <script>
 import ThreeMainAnimation from "~/components/ThreeMainAnimation";
