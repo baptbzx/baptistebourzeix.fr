@@ -1,4 +1,5 @@
 export default {
+    ssr: false,
     buildModules: [
         '@nuxt/postcss8',
         "@nuxtjs/svg",
