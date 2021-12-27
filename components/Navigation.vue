@@ -17,11 +17,11 @@
         <li class="navigation__item">Contact</li>
       </ul>
       <div
-          class="block w-1/2 h-full absolute z-10  top-0 left-0 bg-indigo-500 transform transition delay-600 duration-500"
+          class="block w-1/2 h-full absolute z-10  top-0 left-0 bg-cyan-500 transform transition delay-600 duration-500"
           :class="{ '-translate-y-0 delay-200': menuOpened, 'translate-y-full': !menuOpened }"
       ></div>
       <div
-          class="block w-1/2 h-full absolute z-10  top-0 right-0 bg-indigo-600 transform transition delay-600 duration-500"
+          class="block w-1/2 h-full absolute z-10  top-0 right-0 bg-cyan-600 transform transition delay-600 duration-500"
           :class="{ '-translate-y-0 delay-200': menuOpened, '-translate-y-full': !menuOpened }"
       ></div>
     </nav>

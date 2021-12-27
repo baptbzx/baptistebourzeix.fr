@@ -1,5 +1,5 @@
 <template>
-  <div class="p-12">
+  <div class="relative z-50 p-12">
     <NuxtLink class="inline-block" to="/">
       <Logo />
     </NuxtLink>
@@ -14,7 +14,7 @@ import Navigation from "~/components/Navigation";
 export default {
   head: {
     bodyAttrs: {
-      class: 'bg-indigo-900',
+      class: 'bg-cyan-900',
     }
   },
   components: { Logo, Navigation },
