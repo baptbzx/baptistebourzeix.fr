@@ -22,8 +22,6 @@ import {
 export default {
   data: function () {
     const scene = new THREE.Scene()
-    // const composer = new THREE.EffectComposer(new WebGLRenderer())
-    // const effectPass = new THREE.EffectPass(camera, new BloomEffect())
     const camera = new THREE.PerspectiveCamera(
         45,
         window.innerWidth / window.innerHeight,
@@ -31,16 +29,7 @@ export default {
         20000,
     );
     const renderer = new THREE.WebGLRenderer({antialias: true})
-    const light = new THREE.PointLight('hsl(56,100%,50%)', 1, 5)
-    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshStandardMaterial({
-      side: THREE.FrontSide,
-      color: 0x888888,
-      matalness: 1,
-      roughness: 0,
-      wireframe: false
-    })
-    const cube = new THREE.Mesh(cubeGeometry, material)
+    const light = new THREE.PointLight('hsl(56,100%,50%)', 1, 200)
     const axes = new THREE.AxesHelper(5)
     const mouse = {
       x: 0,
@@ -48,7 +37,7 @@ export default {
     }
     const worldWidth = 128, worldDepth = 128, worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;;
     const data = this.generateHeight(worldWidth, worldDepth);
-    const worldGeometry = new THREE.PlaneBufferGeometry(7500, 7500, worldWidth - 1, worldDepth - 1);
+    const worldGeometry = new THREE.PlaneBufferGeometry(4000, 4000, worldWidth - 1, worldDepth - 1);
     const vertices = worldGeometry.attributes.position.array;
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
@@ -59,7 +48,6 @@ export default {
       controls: [],
       renderer: renderer,
       light: light,
-      cube: cube,
       axes: axes,
       speed: 0.01,
       mouse: mouse,
@@ -76,14 +64,12 @@ export default {
   },
   created: function () {
     this.scene.add(this.camera)
-    this.scene.add(this.light)
-    this.scene.add(this.cube)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.outputEncoding = THREE.sRGBEncoding
     this.renderer.setPixelRatio( window.devicePixelRatio )
     this.light.position.set(0, 0, 2)
-    this.camera.position.z = 0
-    this.scene.background = new THREE.Color("rgb(10, 10, 10)")
-    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(255, 255, 255)"), 0.00031);
+    this.scene.background = new THREE.Color("rgb(10,10,10)")
+    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00025);
     this.controls = new TrackballControls(this.camera)
     this.controls.rotateSpeed = 1.0
     this.controls.zoomSpeed = 5
@@ -93,25 +79,43 @@ export default {
     this.controls.staticMoving = true
     this.controls.dynamicDampingFactor = 0.3
     this.controls.target.y = this.worldData[ this.worldHalfWidth + this.worldHalfDepth * this.worldWidth ] + 500;
-    this.camera.position.y = this.controls.target.y + 500;
+    this.camera.position.y = this.controls.target.y + 100;
+    this.camera.position.z = 300;
     this.worldGeometry.rotateX(-Math.PI / 2);
+
+    this.scene.add(this.light)
 
     for (let i = 0, j = 0, l = this.vertices.length; i < l; i++, j += 3) {
       this.vertices[j + 1] = this.worldData[i] * 10;
     }
 
-    let worldMesh = new THREE.Mesh(
+    const worldMesh = new THREE.Mesh(
         this.worldGeometry,
         new THREE.MeshPhysicalMaterial(
             {
               wireframe: true,
-              color: new THREE.Color('#000'),
               roughness: .5,
               reflectivity: .5,
               thickness: 2,
             }
         ) );
+
+    const worldMeshCopy = new THREE.Mesh(
+        this.worldGeometry,
+        new THREE.MeshPhysicalMaterial(
+            {
+              opacity: 0,
+              transparent: 1,
+              is_raycastable: 1,
+            }
+        )
+    )
+
+    worldMeshCopy.position.y += 50;
+
     this.scene.add(worldMesh)
+    this.scene.add(worldMeshCopy)
+
     window.addEventListener('resize', this.onResize)
   },
   mounted: function () {
@@ -122,9 +126,9 @@ export default {
     animate: function () {
       requestAnimationFrame(this.animate)
       this.renderer.render(this.scene, this.camera)
-      this.cube.rotation.y += this.speed
     },
     onMouseMove: function (e) {
+
       this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
@@ -134,10 +138,11 @@ export default {
       let distance = -this.camera.position.z / dir.z;
       let pos = this.camera.position.clone().add(dir.multiplyScalar(distance));
 
-      this.light.position.copy(new THREE.Vector3(pos.x, pos.y, pos.z + 2));
+      this.light.position.copy(new THREE.Vector3(pos.x, pos.y, pos.z));
     },
     onResize: function () {
       this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix()
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     generateHeight: function (width, height) {
