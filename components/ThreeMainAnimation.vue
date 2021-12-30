@@ -35,6 +35,12 @@ export default {
     const vertices = worldGeometry.attributes.position.array;
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
+    const sphereGeometry = new THREE.SphereGeometry( 10, 32, 16 );
+    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    const planeGeometry = new THREE.PlaneGeometry( 8000, 4000 );
+    const planeMaterial = new THREE.MeshBasicMaterial( {side: THREE.DoubleSide, opacity: 0, transparent: 1,} );
+    const plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
     return {
       scene: scene,
@@ -54,14 +60,20 @@ export default {
       vertices: vertices,
       raycaster: raycaster,
       pointer: pointer,
+      sphereGeometry: sphereGeometry,
+      sphereMaterial: sphereMaterial,
+      sphere: sphere,
+      planeGeometry: planeGeometry,
+      planeMaterial: planeMaterial,
+      plane: plane,
     }
   },
   created: function () {
     this.scene.add(this.camera)
     this.scene.add(this.light)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.outputEncoding = THREE.sRGBEncoding
-    this.renderer.setPixelRatio( window.devicePixelRatio )
+    // this.renderer.outputEncoding = THREE.sRGBEncoding
+    // this.renderer.setPixelRatio( window.devicePixelRatio )
     this.light.position.set(800, 800, 300)
     this.scene.background = new THREE.Color("rgb(10,10,10)")
     this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00025);
@@ -76,6 +88,8 @@ export default {
     this.controls.target.y = this.worldData[ this.worldHalfWidth + this.worldHalfDepth * this.worldWidth ] + 500;
     this.camera.position.y = this.controls.target.y + 100;
     this.camera.position.z = 0;
+
+
     this.worldGeometry.rotateX(-Math.PI / 2);
 
     for (let i = 0, j = 0, l = this.vertices.length; i < l; i++, j += 3) {
@@ -103,11 +117,20 @@ export default {
         )
     )
 
-    worldMeshCopy.position.y += 50;
+    this.worldMeshCopy = worldMeshCopy
+
 
     this.scene.add(worldMesh)
-    this.scene.add(worldMeshCopy)
-    this.worldMeshCopy = worldMeshCopy
+    this.scene.add(this.worldMeshCopy)
+
+    worldMeshCopy.position.y += 50;
+
+    this.scene.add( this.sphere );
+    this.sphere.position.z = -800
+
+    this.scene.add( this.plane );
+    this.plane.position.z = -2000;
+    this.plane.position.y = this.camera.position.y;
   },
   mounted: function () {
     this.$refs.canvas.appendChild(this.renderer.domElement)
@@ -121,35 +144,30 @@ export default {
     },
     render: function() {
       this.raycaster.setFromCamera(this.mouse, this.camera)
-      const intersects = this.raycaster.intersectObject( this.worldMeshCopy );
+      const intersects = this.raycaster.intersectObjects( this.scene.children );
       this.checkIntersects(intersects)
+      this.renderer.autoClear = false;
+      this.renderer.clear();
       this.renderer.render(this.scene, this.camera)
     },
     checkIntersects: function (intersects) {
       if (intersects.length > 0) {
-        //console.log('intersects', intersects[0].point)
-        const pointPos = {
-          x: intersects[0].point.x,
-          y: intersects[0].point.y + 100,
-          z: intersects[0].point.z,
-        }
-        this.light.position.copy(new THREE.Vector3(pointPos.x, pointPos.y, pointPos.z))
-        //console.log('light::position', this.light.position)
+        this.sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+        this.light.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
       }
     },
     onMouseMove: function (e) {
-
       this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      this.mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
 
-      let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 800);
-      vector.unproject(this.camera);
-      let dir = vector.sub(this.camera.position).normalize();
-      let distance = -this.camera.position.z / dir.z;
-      let pos = this.camera.position.clone().add(dir.multiplyScalar(distance));
-
-      //console.log('this::controls', this.controls)
-      //this.light.position.copy(new THREE.Vector3(pos.x, pos.y, pos.z));
+      // Make the sphere follow the mouse
+      var vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
+      vector.unproject( this.camera );
+      var dir = vector.sub( this.camera.position ).normalize();
+      var distance = - this.camera.position.z / dir.z;
+      var pos = this.camera.position.clone().add( dir.multiplyScalar( distance ) );
+      this.light.position.copy(new THREE.Vector3(pos.x, pos.y, -800));
+      this.sphere.position.set(pos.x, pos.y, pos.z);
     },
     onResize: function () {
       this.camera.aspect = window.innerWidth / window.innerHeight;
