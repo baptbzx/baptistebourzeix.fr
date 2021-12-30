@@ -7,17 +7,9 @@
 </template>
 
 <script>
-import {Clock, PerspectiveCamera, Scene, WebGLRenderer} from 'three'
 import * as THREE from 'three'
 import TrackballControls from 'three-trackballcontrols'
 import ImprovedNoise from 'improved-noise'
-import {
-  BloomEffect,
-  EffectComposer,
-  GlitchPass,
-  EffectPass,
-  RenderPass
-} from 'postprocessing'
 
 export default {
   data: function () {
@@ -29,7 +21,9 @@ export default {
         20000,
     );
     const renderer = new THREE.WebGLRenderer({antialias: true})
-    const light = new THREE.PointLight('hsl(56,100%,50%)', 1, 200)
+    const light = new THREE.PointLight('hsl(56,100%,50%)', 1, 100, 2)
+    light.power = 40
+    //const light = new THREE.AmbientLight('hsl(0,0%,100%)')
     const axes = new THREE.AxesHelper(5)
     const mouse = {
       x: 0,
@@ -41,6 +35,12 @@ export default {
     const vertices = worldGeometry.attributes.position.array;
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
+    const sphereGeometry = new THREE.SphereGeometry( 10, 32, 16 );
+    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+    const planeGeometry = new THREE.PlaneGeometry( 8000, 4000 );
+    const planeMaterial = new THREE.MeshBasicMaterial( {side: THREE.DoubleSide, opacity: 0, transparent: 1,} );
+    const plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
     return {
       scene: scene,
@@ -60,14 +60,21 @@ export default {
       vertices: vertices,
       raycaster: raycaster,
       pointer: pointer,
+      sphereGeometry: sphereGeometry,
+      sphereMaterial: sphereMaterial,
+      sphere: sphere,
+      planeGeometry: planeGeometry,
+      planeMaterial: planeMaterial,
+      plane: plane,
     }
   },
   created: function () {
     this.scene.add(this.camera)
+    this.scene.add(this.light)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.outputEncoding = THREE.sRGBEncoding
-    this.renderer.setPixelRatio( window.devicePixelRatio )
-    this.light.position.set(0, 0, 2)
+    // this.renderer.outputEncoding = THREE.sRGBEncoding
+    // this.renderer.setPixelRatio( window.devicePixelRatio )
+    this.light.position.set(800, 800, 300)
     this.scene.background = new THREE.Color("rgb(10,10,10)")
     this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00025);
     this.controls = new TrackballControls(this.camera)
@@ -80,10 +87,10 @@ export default {
     this.controls.dynamicDampingFactor = 0.3
     this.controls.target.y = this.worldData[ this.worldHalfWidth + this.worldHalfDepth * this.worldWidth ] + 500;
     this.camera.position.y = this.controls.target.y + 100;
-    this.camera.position.z = 300;
-    this.worldGeometry.rotateX(-Math.PI / 2);
+    this.camera.position.z = 0;
 
-    this.scene.add(this.light)
+
+    this.worldGeometry.rotateX(-Math.PI / 2);
 
     for (let i = 0, j = 0, l = this.vertices.length; i < l; i++, j += 3) {
       this.vertices[j + 1] = this.worldData[i] * 10;
@@ -102,43 +109,65 @@ export default {
 
     const worldMeshCopy = new THREE.Mesh(
         this.worldGeometry,
-        new THREE.MeshPhysicalMaterial(
+        new THREE.MeshBasicMaterial(
             {
               opacity: 0,
               transparent: 1,
-              is_raycastable: 1,
             }
         )
     )
 
-    worldMeshCopy.position.y += 50;
+    this.worldMeshCopy = worldMeshCopy
+
 
     this.scene.add(worldMesh)
-    this.scene.add(worldMeshCopy)
+    this.scene.add(this.worldMeshCopy)
 
-    window.addEventListener('resize', this.onResize)
+    worldMeshCopy.position.y += 50;
+
+    this.scene.add( this.sphere );
+    this.sphere.position.z = -800
+
+    this.scene.add( this.plane );
+    this.plane.position.z = -2000;
+    this.plane.position.y = this.camera.position.y;
   },
   mounted: function () {
     this.$refs.canvas.appendChild(this.renderer.domElement)
     this.animate()
+    window.addEventListener('resize', this.onResize)
   },
   methods: {
     animate: function () {
       requestAnimationFrame(this.animate)
+      this.render()
+    },
+    render: function() {
+      this.raycaster.setFromCamera(this.mouse, this.camera)
+      const intersects = this.raycaster.intersectObjects( this.scene.children );
+      this.checkIntersects(intersects)
+      this.renderer.autoClear = false;
+      this.renderer.clear();
       this.renderer.render(this.scene, this.camera)
     },
+    checkIntersects: function (intersects) {
+      if (intersects.length > 0) {
+        this.sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+        this.light.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+      }
+    },
     onMouseMove: function (e) {
-
       this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      this.mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
 
-      let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
-      vector.unproject(this.camera);
-      let dir = vector.sub(this.camera.position).normalize();
-      let distance = -this.camera.position.z / dir.z;
-      let pos = this.camera.position.clone().add(dir.multiplyScalar(distance));
-
-      this.light.position.copy(new THREE.Vector3(pos.x, pos.y, pos.z));
+      // Make the sphere follow the mouse
+      var vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
+      vector.unproject( this.camera );
+      var dir = vector.sub( this.camera.position ).normalize();
+      var distance = - this.camera.position.z / dir.z;
+      var pos = this.camera.position.clone().add( dir.multiplyScalar( distance ) );
+      this.light.position.copy(new THREE.Vector3(pos.x, pos.y, -800));
+      this.sphere.position.set(pos.x, pos.y, pos.z);
     },
     onResize: function () {
       this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -155,7 +184,7 @@ export default {
       const size = width * height, data = new Uint8Array(size);
       const perlin = new ImprovedNoise(), z = Math.random() * 100;
 
-      let quality = 2;
+      let quality = 1;
 
       for (let j = 0; j < 3; j++) {
         for (let i = 0; i < size; i++) {
@@ -167,72 +196,6 @@ export default {
 
       return data;
     },
-    generateTexture: function (data, width, height) {
-
-      let context, image, imageData, shade;
-
-      const vector3 = new THREE.Vector3(0, 0, 0);
-
-      const sun = new THREE.Vector3(1, 1, 1);
-      sun.normalize();
-
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-
-      context = canvas.getContext('2d');
-      context.fillStyle = '#000';
-      context.fillRect(0, 0, width, height);
-
-      image = context.getImageData(0, 0, canvas.width, canvas.height);
-      imageData = image.data;
-
-      for (let i = 0, j = 0, l = imageData.length; i < l; i += 4, j++) {
-
-        vector3.x = data[j - 2] - data[j + 2];
-        vector3.y = 2;
-        vector3.z = data[j - width * 2] - data[j + width * 2];
-        vector3.normalize();
-
-        shade = vector3.dot(sun);
-
-        imageData[i] = (96 + shade * 128) * (0.5 + data[j] * 0.007);
-        imageData[i + 1] = (32 + shade * 96) * (0.5 + data[j] * 0.007);
-        imageData[i + 2] = (shade * 96) * (0.5 + data[j] * 0.007);
-
-      }
-
-      context.putImageData(image, 0, 0);
-
-      // Scaled 4x
-
-      const canvasScaled = document.createElement('canvas');
-      canvasScaled.width = width * 4;
-      canvasScaled.height = height * 4;
-
-      context = canvasScaled.getContext('2d');
-      context.scale(4, 4);
-      context.drawImage(canvas, 0, 0);
-
-      image = context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
-      imageData = image.data;
-
-      for (let i = 0, l = imageData.length; i < l; i += 4) {
-
-        const v = ~~(Math.random() * 5);
-
-        imageData[i] += v;
-        imageData[i + 1] += v;
-        imageData[i + 2] += v;
-
-      }
-
-      context.putImageData(image, 0, 0);
-
-      return canvasScaled;
-
-    }
-
   },
   computed: {
     rotate: function () {
