@@ -21,25 +21,24 @@ export default {
         1,
         2000,
     );
-    const renderer = new THREE.WebGLRenderer({antialias: true})
-    const light = new THREE.PointLight('hsl(56,100%,50%)', 1, 100, 2)
-    const axes = new THREE.AxesHelper(5)
-    const mouse = {
-      x: 0,
-      y: 0
-    }
-    const worldWidth = 14, worldDepth = 18, worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;;
-    const data = this.generateHeight(worldWidth, worldDepth);
-    const worldGeometry = new THREE.PlaneBufferGeometry(600, 800, worldWidth - 1, worldDepth - 1);
-    const vertices = worldGeometry.attributes.position.array;
-    const raycaster = new THREE.Raycaster()
-    const pointer = new THREE.Vector2()
-    const sphereGeometry = new THREE.SphereBufferGeometry( 2, 8, 8 );
-    const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    const planeGeometry = new THREE.PlaneBufferGeometry( window.innerWidth * 1.75, window.innerHeight * 1.75, worldWidth - 1, worldDepth - 1 );
-    const planeMaterial = new THREE.MeshBasicMaterial( {side: THREE.FrontSide, opacity: 0, transparent: 1,} );
-    const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    const renderer = new THREE.WebGLRenderer({antialias: true}),
+        light = new THREE.PointLight('hsl(56,100%,50%)', 1, 100, 2),
+        mouse = new THREE.Vector2(),
+        worldWidth = 56,
+        worldDepth = 56,
+        worldHalfWidth = worldWidth / 2,
+        worldHalfDepth = worldDepth / 2,
+        data = this.generateHeight(worldWidth, worldDepth),
+        worldGeometry = new THREE.PlaneBufferGeometry(2000, 2000, worldWidth - 1, worldDepth - 1),
+        vertices = worldGeometry.attributes.position.array,
+        raycaster = new THREE.Raycaster(),
+        pointer = new THREE.Vector2(),
+        sphereGeometry = new THREE.SphereBufferGeometry( 2, 8, 8 ),
+        sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } ),
+        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial),
+        planeGeometry = new THREE.PlaneGeometry( window.innerWidth * 1.75, window.innerHeight * 1.75, worldWidth - 1, worldDepth - 1 ),
+        planeMaterial = new THREE.MeshBasicMaterial( {color: 'hsl(56,100%,50%)', side: THREE.FrontSide, opacity: 1, transparent: 0,} ),
+        plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
     return {
       scene: scene,
@@ -47,7 +46,6 @@ export default {
       controls: [],
       renderer: renderer,
       light: light,
-      axes: axes,
       speed: 0.01,
       mouse: mouse,
       worldWidth: worldWidth,
@@ -72,10 +70,10 @@ export default {
     this.scene.add(this.light)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.outputEncoding = THREE.sRGBEncoding
-    this.renderer.setPixelRatio( window.devicePixelRatio )
+    this.renderer.setPixelRatio(window.devicePixelRatio)
     this.light.position.set(800, 800, 300)
     this.scene.background = new THREE.Color("rgb(10,10,10)")
-    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00101);
+    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00041);
     this.controls = new TrackballControls(this.camera)
     this.controls.rotateSpeed = 1.0
     this.controls.zoomSpeed = 5
@@ -85,11 +83,10 @@ export default {
     this.controls.staticMoving = true
     this.controls.dynamicDampingFactor = 0.3
     this.controls.target.y = this.worldData[ this.worldHalfWidth + this.worldHalfDepth * this.worldWidth ] + 500;
-    this.camera.position.y = this.controls.target.y - 350;
-    this.camera.position.z = 500;
+    this.camera.position.y = this.controls.target.y - 100;
+    this.camera.position.z = 1000;
 
     this.worldGeometry.rotateX(-Math.PI / 2);
-    console.log('vertices::length', this.vertices.length)
     for (let i = 0, j = 0, l = this.vertices.length; i < l; i++, j += 3) {
       this.vertices[j + 1] = this.worldData[i] * 10;
     }
@@ -126,7 +123,7 @@ export default {
     this.scene.add( this.sphere );
 
     this.scene.add( this.plane );
-    this.plane.position.z = -400;
+    this.plane.position.z = -3000;
     this.plane.position.y = this.camera.position.y;
   },
   mounted: function () {
@@ -147,10 +144,9 @@ export default {
       this.renderer.render(this.scene, this.camera)
     },
     checkIntersects: function (intersects) {
+      this.raycaster.setFromCamera(this.mouse, this.camera)
       if (intersects.length > 0) {
-        //this.sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
         this.light.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-        this.raycaster.setFromCamera(this.mouse, this.camera)
 
         new TWEEN.Tween(this.sphere.position).to(
             this.sphere.position
@@ -171,16 +167,16 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     generateHeight: function (width, height) {
-      let seed = Math.PI / 2;
+      let seed = Math.PI / 2,
+          quality = 1;
       window.Math.random = function () {
-        const x = Math.sin(seed++) * 10000;
+        const x = Math.sin(seed++) * 2000;
         return x - Math.floor(x);
       };
 
-      const size = width * height, data = new Uint8Array(size);
-      const perlin = new ImprovedNoise(), z = Math.random() * 100;
-
-      let quality = 1;
+      const perlin = new ImprovedNoise(),
+          size = width * height, data = new Uint8Array(size),
+          z = Math.random() * 100;
 
       for (let j = 0; j < 3; j++) {
         for (let i = 0; i < size; i++) {
