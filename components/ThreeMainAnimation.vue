@@ -33,12 +33,17 @@ export default {
         vertices = worldGeometry.attributes.position.array,
         raycaster = new THREE.Raycaster(),
         pointer = new THREE.Vector2(),
-        sphereGeometry = new THREE.SphereBufferGeometry( 2, 8, 8 ),
-        sphereMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } ),
+        sphereGeometry = new THREE.SphereBufferGeometry(2, 8, 8),
+        sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffff00}),
         sphere = new THREE.Mesh(sphereGeometry, sphereMaterial),
-        planeGeometry = new THREE.PlaneGeometry( window.innerWidth * 1.75, window.innerHeight * 1.75, worldWidth - 1, worldDepth - 1 ),
-        planeMaterial = new THREE.MeshBasicMaterial( {color: 'hsl(56,100%,50%)', side: THREE.FrontSide, opacity: 1, transparent: 0,} ),
-        plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        planeGeometry = new THREE.PlaneGeometry(window.innerWidth * 1.75, window.innerHeight * 1.75, worldWidth - 1, worldDepth - 1),
+        planeMaterial = new THREE.MeshBasicMaterial({
+          color: 'hsl(56,100%,50%)',
+          side: THREE.FrontSide,
+          opacity: 1,
+          transparent: 0,
+        }),
+        plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
     return {
       scene: scene,
@@ -72,7 +77,7 @@ export default {
     this.renderer.outputEncoding = THREE.sRGBEncoding
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.light.position.set(800, 800, 300)
-    this.scene.background = new THREE.Color("rgb(10,10,10)")
+    this.scene.background = new THREE.Color(this.colors.background)
     this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00041);
     this.controls = new TrackballControls(this.camera)
     this.controls.rotateSpeed = 1.0
@@ -82,7 +87,7 @@ export default {
     this.controls.noPan = true
     this.controls.staticMoving = true
     this.controls.dynamicDampingFactor = 0.3
-    this.controls.target.y = this.worldData[ this.worldHalfWidth + this.worldHalfDepth * this.worldWidth ] + 500;
+    this.controls.target.y = this.worldData[this.worldHalfWidth + this.worldHalfDepth * this.worldWidth] + 500;
     this.camera.position.y = this.controls.target.y - 100;
     this.camera.position.z = 1000;
 
@@ -100,7 +105,7 @@ export default {
               reflectivity: .5,
               thickness: 2,
             }
-        ) );
+        ));
 
     const worldMeshCopy = new THREE.Mesh(
         this.worldGeometry,
@@ -120,9 +125,9 @@ export default {
 
     worldMeshCopy.position.y += 5;
 
-    this.scene.add( this.sphere );
+    this.scene.add(this.sphere);
 
-    this.scene.add( this.plane );
+    this.scene.add(this.plane);
     this.plane.position.z = -3000;
     this.plane.position.y = this.camera.position.y;
   },
@@ -130,15 +135,16 @@ export default {
     this.$refs.canvas.appendChild(this.renderer.domElement)
     this.animate()
     window.addEventListener('resize', this.onResize)
+    this.setColors()
   },
   methods: {
     animate: function () {
       requestAnimationFrame(this.animate)
       this.render()
     },
-    render: function() {
+    render: function () {
 
-      const intersects = this.raycaster.intersectObjects( [this.worldMeshCopy, this.plane] );
+      const intersects = this.raycaster.intersectObjects([this.worldMeshCopy, this.plane]);
       this.checkIntersects(intersects)
 
       this.renderer.render(this.scene, this.camera)
@@ -159,12 +165,12 @@ export default {
     },
     onMouseMove: function (e) {
       this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      this.mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+      this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     },
     onResize: function () {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix()
-      this.renderer.setSize( window.innerWidth, window.innerHeight );
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
     generateHeight: function (width, height) {
       let seed = Math.PI / 2,
@@ -188,8 +194,19 @@ export default {
 
       return data;
     },
+    setColors: function () {
+      this.scene.background = this.colors.background
+      this.sphere.material.color.set(this.colors.accent)
+      this.light.color.set(this.colors.accent)
+    },
   },
   computed: {
+    theme: function () {
+      return this.$store.state.theme
+    },
+    colors: function () {
+      return this.$store.state.colors[this.theme]
+    },
     rotate: function () {
       if (this.speed === '') {
         return 0
