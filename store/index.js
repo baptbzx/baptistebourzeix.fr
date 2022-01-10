@@ -22,6 +22,9 @@ export const mutations = {
     toggleMenu(state) {
         state.menuOpened = !state.menuOpened
     },
+    toggleTheme(state) {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark'
+    },
     closeMenu(state) {
         state.menuOpened = false
     }
