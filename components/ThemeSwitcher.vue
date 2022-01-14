@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Moon v-if="theme === 'light'" @click="toggleTheme" />
-    <MoonAwake v-if="theme === 'dark'" @click="toggleTheme" />
+    <Moon v-if="theme === 'light'" @click="onMoonClick" />
+    <MoonAwake v-if="theme === 'dark'" @click="onMoonClick" />
   </div>
 </template>
 
@@ -21,7 +21,12 @@ export default {
   methods: {
     ...mapMutations({
       toggleTheme: "toggleTheme"
-    })
+    }),
+    onMoonClick: function () {
+      console.log('on::moon::click')
+      this.toggleTheme()
+      this.$emit('moonClick')
+    }
   }
 }
 </script>

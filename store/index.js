@@ -3,7 +3,7 @@ export const state = () => ({
     theme: 'dark',
     colors: {
         dark: {
-            background: 'rgb(10,10,10)',
+            background: 'rgb(0,0,0)',
             content: 'rgb(220,220,220)',
             accent: 'rgb(255,255,0)',
             accentAlt: 'rgb(238, 116,8)'
@@ -11,7 +11,7 @@ export const state = () => ({
         light: {
             background: 'rgb(220,220,220)',
             content: 'rgb(10,10,10)',
-            accent: 'rgb(255,255,0)',
+            accent: 'rgb(255,0,0)',
             accentAlt: 'rgb(238, 116,8)'
         }
     },

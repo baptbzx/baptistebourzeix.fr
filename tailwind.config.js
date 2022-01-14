@@ -7,6 +7,7 @@ module.exports = {
         "./nuxt.config.{js,ts}",
         "./assets/**/*.svg",
     ],
+    darkMode: 'class',
     theme: {
         extend: {},
     },
