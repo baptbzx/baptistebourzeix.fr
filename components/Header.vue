@@ -1,9 +1,9 @@
 <template>
-  <div class="relative z-50 p-12">
-    <NuxtLink class="inline-block" to="/">
+  <div class="relative z-50 p-12 pointer-events-none">
+    <NuxtLink class="inline-block pointer-events-auto" to="/">
       <Logo />
     </NuxtLink>
-    <Navigation />
+    <Navigation class="pointer-events-auto" />
   </div>
 </template>
 
@@ -15,6 +15,9 @@ export default {
   head: {
     bodyAttrs: {
       class: 'bg-cyan-900',
+    },
+    htmlAttrs: {
+      class: 'dark',
     }
   },
   components: { Logo, Navigation },
