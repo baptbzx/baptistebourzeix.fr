@@ -1,9 +1,12 @@
 <template>
-  <div
-      class="absolute top-0 left-0 z-10 h-full w-full"
-      ref="canvas"
-      @mousemove="onMouseMove"
-  ></div>
+  <div>
+    <div
+        class="absolute top-0 left-0 z-10 h-full w-full"
+        ref="canvas"
+        @mousemove="onMouseMove"
+        v-on:moonClick="setColors"
+    ></div>
+  </div>
 </template>
 
 <script>
@@ -16,10 +19,10 @@ export default {
   data: function () {
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(
-        45,
+        75,
         window.innerWidth / window.innerHeight,
-        1,
-        2000,
+        0.1,
+        3000,
     );
     const renderer = new THREE.WebGLRenderer({antialias: true}),
         light = new THREE.PointLight('hsl(56,100%,50%)', 1, 100, 2),
@@ -29,19 +32,19 @@ export default {
         worldHalfWidth = worldWidth / 2,
         worldHalfDepth = worldDepth / 2,
         data = this.generateHeight(worldWidth, worldDepth),
-        worldGeometry = new THREE.PlaneBufferGeometry(2000, 2000, worldWidth - 1, worldDepth - 1),
+        worldGeometry = new THREE.PlaneBufferGeometry(3000, 3000, worldWidth - 1, worldDepth - 1),
         vertices = worldGeometry.attributes.position.array,
         raycaster = new THREE.Raycaster(),
         pointer = new THREE.Vector2(),
-        sphereGeometry = new THREE.SphereBufferGeometry(2, 8, 8),
+        clock = new THREE.Clock(),
+        sphereGeometry = new THREE.SphereBufferGeometry(4, 16, 16),
         sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffff00}),
         sphere = new THREE.Mesh(sphereGeometry, sphereMaterial),
-        planeGeometry = new THREE.PlaneGeometry(window.innerWidth * 1.75, window.innerHeight * 1.75, worldWidth - 1, worldDepth - 1),
+        planeGeometry = new THREE.PlaneBufferGeometry(5000, 5000, worldWidth - 1, worldDepth - 1),
         planeMaterial = new THREE.MeshBasicMaterial({
-          color: 'hsl(56,100%,50%)',
           side: THREE.FrontSide,
-          opacity: 1,
-          transparent: 0,
+          opacity: 0,
+          transparent: 1,
         }),
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
@@ -68,6 +71,7 @@ export default {
       planeGeometry: planeGeometry,
       planeMaterial: planeMaterial,
       plane: plane,
+      clock: clock,
     }
   },
   created: function () {
@@ -78,7 +82,7 @@ export default {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.light.position.set(800, 800, 300)
     this.scene.background = new THREE.Color(this.colors.background)
-    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00041);
+    this.scene.fog = new THREE.FogExp2(new THREE.Color("rgb(220,220,220)"), 0.00051);
     this.controls = new TrackballControls(this.camera)
     this.controls.rotateSpeed = 1.0
     this.controls.zoomSpeed = 5
@@ -88,8 +92,9 @@ export default {
     this.controls.staticMoving = true
     this.controls.dynamicDampingFactor = 0.3
     this.controls.target.y = this.worldData[this.worldHalfWidth + this.worldHalfDepth * this.worldWidth] + 500;
-    this.camera.position.y = this.controls.target.y - 100;
-    this.camera.position.z = 1000;
+    this.camera.position.y = this.controls.target.y - 50;
+    this.camera.position.x = this.controls.target.x - 100;
+    this.camera.position.z = 500;
 
     this.worldGeometry.rotateX(-Math.PI / 2);
     for (let i = 0, j = 0, l = this.vertices.length; i < l; i++, j += 3) {
@@ -103,7 +108,7 @@ export default {
               wireframe: true,
               roughness: .5,
               reflectivity: .5,
-              thickness: 2,
+              thickness: 1,
             }
         ));
 
@@ -118,18 +123,16 @@ export default {
     )
 
     this.worldMeshCopy = worldMeshCopy
-
+    this.scene.add(this.plane);
+    const planePos = new THREE.Vector3(0,0,-2000)
+    this.plane.position.copy(planePos)
 
     this.scene.add(worldMesh)
     this.scene.add(this.worldMeshCopy)
 
-    worldMeshCopy.position.y += 5;
+    worldMeshCopy.position.y += 10;
 
     this.scene.add(this.sphere);
-
-    this.scene.add(this.plane);
-    this.plane.position.z = -3000;
-    this.plane.position.y = this.camera.position.y;
   },
   mounted: function () {
     this.$refs.canvas.appendChild(this.renderer.domElement)
@@ -195,7 +198,8 @@ export default {
       return data;
     },
     setColors: function () {
-      this.scene.background = this.colors.background
+      this.scene.background.set(this.colors.background)
+      this.plane.material.color.set(this.colors.background)
       this.sphere.material.color.set(this.colors.accent)
       this.light.color.set(this.colors.accent)
     },
@@ -214,6 +218,15 @@ export default {
         return this.speed
       }
     }
-  }
+  },
+  watch: {
+    colors: function () {
+      this.setColors()
+    },
+    theme: function () {
+      document.documentElement.classList = []
+      document.documentElement.classList.add(this.theme)
+    },
+  },
 }
 </script>
