@@ -40,7 +40,7 @@ export default {
         sphereGeometry = new THREE.SphereBufferGeometry(4, 16, 16),
         sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffff00}),
         sphere = new THREE.Mesh(sphereGeometry, sphereMaterial),
-        planeGeometry = new THREE.PlaneBufferGeometry(5000, 5000, worldWidth - 1, worldDepth - 1),
+        planeGeometry = new THREE.PlaneBufferGeometry(10000, 10000, worldWidth - 1, worldDepth - 1),
         planeMaterial = new THREE.MeshBasicMaterial({
           side: THREE.FrontSide,
           opacity: 0,
@@ -203,6 +203,7 @@ export default {
       this.sphere.material.color.set(this.colors.accent)
       this.light.color.set(this.colors.accent)
     },
+
   },
   computed: {
     theme: function () {

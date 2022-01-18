@@ -4,6 +4,7 @@ export default {
         '@nuxt/postcss8',
         "@nuxtjs/svg",
     ],
+    modules: ['@nuxtjs/axios'],
     build: {
         postcss: {
             plugins: {

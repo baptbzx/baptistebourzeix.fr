@@ -9,7 +9,7 @@
 import Moon from "~/assets/svg/moon_sleep.svg?inline";
 import MoonAwake from "~/assets/svg/moon_awake.svg?inline";
 import { mapMutations } from 'vuex'
-
+import { mapActions } from 'vuex'
 
 export default {
   components: { Moon, MoonAwake },
@@ -18,9 +18,16 @@ export default {
       return this.$store.state.theme
     }
   },
+  mounted: function() {
+    this.setTheme()
+  },
   methods: {
     ...mapMutations({
       toggleTheme: "toggleTheme"
+    }),
+    ...mapActions({
+      getSunTimes: 'getSunTimes',
+      setTheme: 'setTheme'
     }),
     onMoonClick: function () {
       console.log('on::moon::click')
