@@ -63,7 +63,7 @@ export default {
           shininess :0
         })
     const moon = new THREE.Mesh(moonGeometry, moonMaterial)
-    const moonLight = new THREE.DirectionalLight(0xFFFFFF, 1)
+    const moonLight = new THREE.DirectionalLight(0xFFFFFF, 0.75)
 
     return {
       scene: scene,
@@ -156,9 +156,9 @@ export default {
     this.scene.add(this.sphere);
 
     const moonPos = new THREE.Vector3(0,800,-1500)
-    const moonLightPos = new THREE.Vector3(-100,900,0)
-    this.scene.add(this.moon);
-    this.scene.add(this.moonLight);
+    const moonLightPos = new THREE.Vector3(-500,1000,-1100)
+    this.scene.add(this.moon)
+    this.scene.add(this.moonLight)
     this.moon.position.copy(moonPos)
     this.moonLight.position.copy(moonLightPos)
     this.moonLight.target = this.moon
@@ -172,8 +172,8 @@ export default {
   methods: {
     animate: function () {
       requestAnimationFrame(this.animate)
-      this.moon.rotation.y += 0.004
-      this.moon.rotation.x += 0.0002
+      this.moon.rotation.y += 0.0005
+      //this.moon.rotation.y += 0.0001
       this.render()
     },
     render: function () {
@@ -237,7 +237,7 @@ export default {
       if (this.theme === 'light') {
         this.scene.fog.density = 0
       } else {
-        this.scene.fog.density = 0.00051
+        this.scene.fog.density = 0
       }
     },
 
