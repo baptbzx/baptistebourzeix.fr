@@ -47,6 +47,23 @@ export default {
           transparent: 1,
         }),
         plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    // Moon
+    const moonGeometry = new THREE.SphereGeometry( 300,60,60 )
+    const textureLoader = new THREE.TextureLoader()
+    const moonTexture = textureLoader.load("/jpg/moon_texture.jpg")
+    const moonDisplacementMap = textureLoader.load("/jpg/moon_displacement.jpg")
+    const moonMaterial = new THREE.MeshPhongMaterial (
+        { color: 0xffffff ,
+          map: moonTexture ,
+          displacementMap: moonDisplacementMap,
+          displacementScale: 0.06,
+          bumpMap: moonDisplacementMap,
+          bumpScale: 0.04,
+          reflectivity:0,
+          shininess :0
+        })
+    const moon = new THREE.Mesh(moonGeometry, moonMaterial)
+    const moonLight = new THREE.DirectionalLight(0xFFFFFF, 1)
 
     return {
       scene: scene,
@@ -72,6 +89,10 @@ export default {
       planeMaterial: planeMaterial,
       plane: plane,
       clock: clock,
+      textureLoader: textureLoader,
+      moonGeometry: moonGeometry,
+      moon: moon,
+      moonLight: moonLight,
     }
   },
   created: function () {
@@ -133,6 +154,14 @@ export default {
     worldMeshCopy.position.y += 10;
 
     this.scene.add(this.sphere);
+
+    const moonPos = new THREE.Vector3(0,800,-1500)
+    const moonLightPos = new THREE.Vector3(-100,900,0)
+    this.scene.add(this.moon);
+    this.scene.add(this.moonLight);
+    this.moon.position.copy(moonPos)
+    this.moonLight.position.copy(moonLightPos)
+    this.moonLight.target = this.moon
   },
   mounted: function () {
     this.$refs.canvas.appendChild(this.renderer.domElement)
@@ -143,6 +172,8 @@ export default {
   methods: {
     animate: function () {
       requestAnimationFrame(this.animate)
+      this.moon.rotation.y += 0.004
+      this.moon.rotation.x += 0.0002
       this.render()
     },
     render: function () {
@@ -202,6 +233,12 @@ export default {
       this.plane.material.color.set(this.colors.background)
       this.sphere.material.color.set(this.colors.accent)
       this.light.color.set(this.colors.accent)
+
+      if (this.theme === 'light') {
+        this.scene.fog.density = 0
+      } else {
+        this.scene.fog.density = 0.00051
+      }
     },
 
   },
