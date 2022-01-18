@@ -11,7 +11,7 @@ export const state = () => ({
         light: {
             background: 'rgb(220,220,220)',
             content: 'rgb(10,10,10)',
-            accent: 'rgb(255,0,0)',
+            accent: 'rgb(238, 116,8)',
             accentAlt: 'rgb(238, 116,8)'
         }
     },
@@ -25,9 +25,9 @@ export const mutations = {
     setTheme(state) {
         const sunsetFormated = new Date(state.sun.sunset).getTime()
         if (state.currentDate <= sunsetFormated) {
-            state.theme = "dark"
-        } else {
             state.theme = "light"
+        } else {
+            state.theme = "dark"
         }
     },
     setCurrentDate(state, date) {

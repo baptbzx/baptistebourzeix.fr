@@ -30,7 +30,6 @@ export default {
       setTheme: 'setTheme'
     }),
     onMoonClick: function () {
-      console.log('on::moon::click')
       this.toggleTheme()
       this.$emit('moonClick')
     }
