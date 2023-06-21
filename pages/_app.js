@@ -4,7 +4,7 @@ import '../styles/globals.css'
 
 export default function MyApp({ Component, pageProps }) {
     useEffect(() => {
-        document.body.className = 'p-8 bg-white';
+        document.body.className = 'bg-white';
     });
 
     return (

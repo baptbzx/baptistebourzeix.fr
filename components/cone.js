@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGLTF, Float } from '@react-three/drei'
 
-function Box(props) {
+function Cone(props) {
     const { viewport, camera } = useThree()
     const [speed] = useState(() => 0.1 + Math.random() / 10)
     const position = useMemo(() => {
@@ -15,10 +15,18 @@ function Box(props) {
     return (
         <Float position={position} speed={speed} rotationIntensity={10} floatIntensity={40} dispose={null}>
             <mesh {...props} recieveShadow={false} castShadow>
-                <boxBufferGeometry attach="geometry" args={[0.75, 0.75, 0.75]} />
-                <meshPhysicalMaterial attach="material" metalness={0.9} roughness={0.25} wireframe={false} />
+                <coneBufferGeometry 
+                    attach="geometry"
+                    args={[0.4, 1, 6]} 
+                />
+                <meshPhysicalMaterial 
+                    attach="material" 
+                    metalness={0.9} 
+                    roughness={0.25} 
+                    wireframe={false} 
+                />
             </mesh>
         </Float>
     );
 }
-export default Box;
+export default Cone;
