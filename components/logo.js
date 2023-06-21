@@ -1,5 +1,5 @@
 export const Logo = () => (
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-40 w-40" xml:space="preserve">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-40 w-40" xmlSpace="preserve">
 <g className="logo-spin animate-[spin_30s_linear_infinite] origin-center" id="XMLID_7_">
 	<path id="XMLID_95_" className="fill-white" d="M13.6,79.3l-13-2.8c-0.5-0.1-0.6-0.5-0.6-0.9C0.1,75.2,0.5,75,0.9,75l5.2,1.1
 		c-0.6-1-0.7-1.8-0.6-2.6c0.6-2.7,2.8-4.1,5.3-3.6l1,0.2c2.4,0.5,3.9,2.8,3.4,5c-0.2,1.1-0.8,1.9-1.7,2.6l0.3,0.1
