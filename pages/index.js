@@ -22,9 +22,9 @@ export default function Home() {
               camera={{ position: [0, 0, 10], fov: 22 }}
           >
             <ambientLight color={"#FFFFFF"} intensity={0.1} />
-            <LightBulb position={[0, 7, 0]} />
+            <LightBulb position={[0, 4, 0]} />
+            <LightBulb position={[0, 4, -10]} />
             <Background />
-          
               <Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone />
               <Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere />
               <Caption>{`I'm a front-end\nweb developer\nbased in\nStrasbourg, France`}</Caption>

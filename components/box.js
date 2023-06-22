@@ -3,6 +3,10 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useGLTF, Float } from '@react-three/drei'
 
+function randomIntFromInterval(min, max) { 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 function Box(props) {
     const { viewport, camera } = useThree()
     const [speed] = useState(() => 0.1 + Math.random() / 10)
@@ -13,7 +17,7 @@ function Box(props) {
     }, [viewport])
 
     return (
-        <Float position={position} speed={speed} rotationIntensity={10} floatIntensity={40} dispose={null}>
+        <Float position={position} speed={speed} rotationIntensity={randomIntFromInterval(10,100)} floatIntensity={randomIntFromInterval(30,100)} dispose={null}>
             <mesh {...props} recieveShadow={false} castShadow>
                 <boxBufferGeometry attach="geometry" args={[0.75, 0.75, 0.75]} />
                 <meshPhysicalMaterial attach="material" metalness={0.9} roughness={0.25} wireframe={false} />
