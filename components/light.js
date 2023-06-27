@@ -4,7 +4,7 @@ function LightBulb(props) {
     return (
         <mesh {...props} >
             <pointLight castShadow={true} color={0x0000FF} />
-            <sphereBufferGeometry args={[0.1, 10, 10]} />
+            <sphereGeometry args={[0.1, 10, 10]} />
             <meshPhongMaterial emissive={"blue"}  />
         </mesh>
     );

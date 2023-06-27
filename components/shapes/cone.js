@@ -19,7 +19,7 @@ function Cone(props) {
     return (
         <Float position={position} speed={speed} rotationIntensity={randomIntFromInterval(10,100)} floatIntensity={randomIntFromInterval(30,100)} dispose={null}>
             <mesh {...props} recieveShadow={false} castShadow>
-                <coneBufferGeometry 
+                <coneGeometry 
                     attach="geometry"
                     args={[0.4, 1, 6]} 
                 />

@@ -7,7 +7,7 @@ function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function Sphere(props) {
+function Box(props) {
     const { viewport, camera } = useThree()
     const [speed] = useState(() => 0.1 + Math.random() / 10)
     const position = useMemo(() => {
@@ -15,22 +15,14 @@ function Sphere(props) {
         const bounds = viewport.getCurrentViewport(camera, [0, 0, z])
         return [THREE.MathUtils.randFloatSpread(bounds.width), THREE.MathUtils.randFloatSpread(bounds.height * 0.75), z]
     }, [viewport])
-   
+
     return (
         <Float position={position} speed={speed} rotationIntensity={randomIntFromInterval(10,100)} floatIntensity={randomIntFromInterval(30,100)} dispose={null}>
             <mesh {...props} recieveShadow={false} castShadow>
-                <sphereBufferGeometry 
-                    attach="geometry"
-                    args={[.4, 32, 32]} 
-                />
-                <meshPhysicalMaterial 
-                    attach="material" 
-                    metalness={0.9} 
-                    roughness={0.25} 
-                    wireframe={false} 
-                />
+                <boxGeometry attach="geometry" args={[0.75, 0.75, 0.75]} />
+                <meshPhysicalMaterial attach="material" metalness={0.9} roughness={0.25} wireframe={false} />
             </mesh>
         </Float>
     );
 }
-export default Sphere;
+export default Box;

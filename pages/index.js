@@ -1,15 +1,14 @@
 import * as THREE from 'three'
-import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import css from '../styles/Home.module.css'
-import Floor from '../components/floor';
-import Box from '../components/box';
-import Cone from '../components/cone';
-import Sphere from '../components/sphere';
+import Box from '../components/shapes/box';
+import Cone from '../components/shapes/cone';
+import Sphere from '../components/shapes/sphere';
 import LightBulb from '../components/light';
 import Caption from '../components/caption';
 import Background from '@/components/background';
-import { OrbitControls, PerspectiveCamera, View as ViewImpl, useGLTF, Float } from '@react-three/drei'
+import Coffee from '@/components/shapes/coffee';
+import KeyCap from '@/components/shapes/keycap';
 
 export default function Home() {
   return (
@@ -30,6 +29,8 @@ export default function Home() {
               <Caption>{`I'm a front-end\nweb developer\nbased in\nStrasbourg, France`}</Caption>
               <Rig />
               <Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box />
+              <Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee />
+              <KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap />
           </Canvas>
       </div>
     </main>
