@@ -9,6 +9,7 @@ import Caption from '../components/caption';
 import Background from '@/components/background';
 import Coffee from '@/components/shapes/coffee';
 import KeyCap from '@/components/shapes/keycap';
+import Button from '@/components/button';
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
               <Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone /><Cone />
               <Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere /><Sphere />
               <Caption>{`I'm a front-end\nweb developer\nbased in\nStrasbourg, France`}</Caption>
+              <Button>about me</Button>
               <Rig />
               <Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box />
               <Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee />
