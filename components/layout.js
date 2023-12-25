@@ -16,7 +16,8 @@ export default function Layout({ children }) {
     return (
         <>
             <Header />
-            <main className="flex min-h-screen flex-col items-center justify-between">
+            <main className="h-full flex flex-row items-center justify-between bg-custom-dark-blue">
+                {children}
                 <div className={css.scene}>
                     <Canvas
                         shadows
@@ -24,6 +25,7 @@ export default function Layout({ children }) {
                         dpr={[1, 2]} 
                         camera={{ position: [0, 0, 10], fov: 22 }}
                     >
+                        <Rig />
                         <ambientLight color={"#FFFFFF"} intensity={0.1} />
                         <LightBulb position={[0, 4, 0]} />
                         <LightBulb position={[0, 4, -10]} />
@@ -34,7 +36,6 @@ export default function Layout({ children }) {
                         <Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box /><Box />
                         <Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee /><Coffee />
                         <KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap /><KeyCap />
-                        {children}
                     </Canvas>
                 </div>
             </main>

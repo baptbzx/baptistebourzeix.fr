@@ -16,10 +16,11 @@
   }
 }
 
-#__next {
-    background-color: black;
+body {
+    color: rgb(var(--foreground-rgb));
+    height: 100vh;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
+.h-full {
+    height: calc(100vh - 3rem);
 }
