@@ -18,7 +18,7 @@ export default function Layout({ children }) {
             <Header />
             <main className="h-full flex flex-row items-center justify-between bg-custom-dark-blue">
                 {children}
-                <div className={css.scene}>
+                <div className="w-1/2 h-full">
                     <Canvas
                         shadows
                         className={css.canvas}

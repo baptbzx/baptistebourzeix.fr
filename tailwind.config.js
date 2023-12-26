@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'cartograph': ['cartograph-cf', 'monospace'],
+      },
       colors: {
         'custom-blue': '#0000C7',
         'custom-dark-blue': '#000052',
