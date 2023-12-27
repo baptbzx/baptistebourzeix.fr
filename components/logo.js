@@ -1,6 +1,72 @@
 export const Logo = () => (
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-32 w-32" xmlSpace="preserve">
-<g className="logo-spin animate-[spin_30s_linear_infinite] origin-center" id="XMLID_7_">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-40 w-40" xmlSpace="preserve">
+        <defs>
+            <filter id="glitchshadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="0" result="blur"></feGaussianBlur>
+                <feOffset dx="0" dy="0" result="offsetblur">
+                    <animate
+                        attributeName="dx"
+                        from="0"
+                        to="0"
+                        begin="0s"
+                        dur="0.1s"
+                        repeatCount="indefinite"
+                        values        = "-5;-2;-2;-2;5;0"
+                        keyTimes      = "0;0.125;0.275;0.625;0.875;1"
+                    ></animate>
+                    <animate
+                        attributeName="dy"
+                        from="0"
+                        to="0"
+                        begin="0s"
+                        dur="0.1s"
+                        repeatCount="indefinite"
+                        values        = "1;1.5;3;1.7;-1.7;0"
+                        keyTimes      = "0;0.125;0.275;0.625;0.875;1"
+                    ></animate>
+                </feOffset>
+                <feOffset dx="60" dy="-12" result="offsetblur2" in="blur">
+                    <animate
+                        attributeName="dx"
+                        from="0"
+                        to="0"
+                        begin="0s"
+                        dur="0.1s"
+                        repeatCount="indefinite"
+                        values        = "0;5;-2;-2;-2;-5"
+                        keyTimes      = "0;0.125;0.275;0.625;0.875;1"
+                    ></animate>
+                    <animate
+                        attributeName="dy"
+                        from="0"
+                        to="0"
+                        begin="0s"
+                        dur="0.1s"
+                        repeatCount="indefinite"
+                        values        = "0;-1.7;1.7;-3;1.5;1"
+                        keyTimes      = "0;0.125;0.275;0.625;0.875;1"
+                    ></animate>
+                </feOffset>
+                <feComponentTransfer result="shadow1" in="offsetblur">
+                    <feFuncA type="linear" slope=".8"></feFuncA>
+                    <feFuncR type="discrete" tableValues="0"></feFuncR>/>
+                    <feFuncG type="discrete" tableValues="1"></feFuncG>/>
+                    <feFuncB type="discrete" tableValues="1"></feFuncB>/>
+                </feComponentTransfer>
+                <feComponentTransfer result="shadow2" in="offsetblur2">
+                    <feFuncA type="linear" slope=".8"></feFuncA>/>
+                    <feFuncR type="discrete" tableValues="1"></feFuncR>/>
+                    <feFuncG type="discrete" tableValues="0"></feFuncG>/>
+                    <feFuncB type="discrete" tableValues="1"></feFuncB>/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode in="shadow1"></feMergeNode>/>
+                    <feMergeNode in="shadow2"></feMergeNode>/>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>/>
+                </feMerge>
+            </filter>
+        </defs>
+        <g className="logo-spin animate-[spin_30s_linear_infinite] origin-center" id="XMLID_7_">
 	<path id="XMLID_95_" className="fill-white" d="M13.6,79.3l-13-2.8c-0.5-0.1-0.6-0.5-0.6-0.9C0.1,75.2,0.5,75,0.9,75l5.2,1.1
 		c-0.6-1-0.7-1.8-0.6-2.6c0.6-2.7,2.8-4.1,5.3-3.6l1,0.2c2.4,0.5,3.9,2.8,3.4,5c-0.2,1.1-0.8,1.9-1.7,2.6l0.3,0.1
 		c0.4,0.1,0.7,0.5,0.6,0.9C14.4,79.1,14.1,79.4,13.6,79.3z M11.5,71.6l-1-0.2c-1.7-0.4-3.1,0.6-3.4,2.1s0.7,3,2.3,3.3l1,0.2

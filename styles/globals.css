@@ -24,3 +24,7 @@ body {
 .h-full {
     height: calc(100vh - 3rem);
 }
+
+.logo:hover .logo-letter {
+    filter: url(#glitchshadow);
+}
