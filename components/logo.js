@@ -1,5 +1,5 @@
 export const Logo = () => (
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-40 w-40" xmlSpace="preserve">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="182.9px" height="184.5px" viewBox="0 0 182.9 184.5" className="logo h-[10vw] w-[10vw]" xmlSpace="preserve">
         <defs>
             <filter id="glitchshadow">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="0" result="blur"></feGaussianBlur>

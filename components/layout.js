@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
+import { Html, Stats } from "@react-three/drei";
 import css from '../styles/Home.module.css'
 import Footer from "./footer";
 import Header from "./header";
@@ -11,20 +12,26 @@ import Background from '@/components/background';
 import Coffee from '@/components/shapes/coffee';
 import KeyCap from '@/components/shapes/keycap';
 import Rig from '@/components/rig';
+import Button from '@/components/button';
 
 export default function Layout({ children }) {
     return (
         <>
             <Header />
-            <main className="h-full flex flex-row items-center justify-between bg-custom-dark-blue">
-                {children}
-                <div className="w-1/2 h-full">
+            <main className="h-full flex flex-row items-center justify-between">
+
+                <div className="w-full h-full">
                     <Canvas
                         shadows
                         className={css.canvas}
                         dpr={[1, 2]} 
                         camera={{ position: [0, 0, 10], fov: 22 }}
                     >
+                        {children}
+                        <Html center="true">
+
+                        </Html>
+                        <Button>About me</Button>
                         <Rig />
                         <ambientLight color={"#FFFFFF"} intensity={0.1} />
                         <LightBulb position={[0, 4, 0]} />

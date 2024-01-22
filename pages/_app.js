@@ -4,7 +4,7 @@ import '../styles/globals.css'
 
 export default function MyApp({ Component, pageProps }) {
     useEffect(() => {
-        document.body.className = 'bg-white p-6 font-cartograph';
+        document.body.className = 'bg-white font-cartograph';
     });
 
     return (

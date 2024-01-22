@@ -1,6 +1,6 @@
 .scene {
-    width: 55%;
-    height: calc(100vh - 3rem);
+    width: 100vw;
+    height: 100vh;
 }
 
 .canvas {
