@@ -5,7 +5,6 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, Stats } from "@react-three/drei";
 import css from '../styles/Home.module.css'
 import Footer from "./footer"
-import Header from "./header"
 import Box from '../components/shapes/box'
 import Cone from '../components/shapes/cone'
 import Sphere from '../components/shapes/sphere'
@@ -22,14 +21,8 @@ export default function Layout({ children }) {
 
     const router = useRouter()
 
-    let [cameraZ] = useState(10)
-    if (router.pathname === "/about") {
-        [cameraZ] = useState(20)
-    }
-
     return (
         <>
-            <Header />
             <Curve>
                 <main className="h-full flex flex-row items-center justify-between">
                     <div className="w-full h-full">
@@ -37,7 +30,7 @@ export default function Layout({ children }) {
                             shadows
                             className={css.canvas}
                             dpr={[1, 2]}
-                            camera={{ position: [0, 0, cameraZ], fov: 22 }}
+                            camera={{ position: [0, 0, 10], fov: 22 }}
                         >
                             {children}
                             <Rig />

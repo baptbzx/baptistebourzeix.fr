@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import { useState, useMemo, useLayoutEffect } from 'react'
-import { useThree } from '@react-three/fiber'
+import { useThree, useLoader } from '@react-three/fiber'
 import { useGLTF, Float } from '@react-three/drei'
 import { LayerMaterial, Base, Depth, Fresnel, Noise } from 'lamina/vanilla'
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import { useRouter } from 'next/router'
 
 useGLTF.preload('/fck_off_keycap.glb')
 
@@ -11,6 +13,9 @@ function randomIntFromInterval(min, max) {
 }
 
 function KeyCap (...props) {
+    const router = useRouter()
+    const isAbout = router.pathname === '/about'
+    const colorMap = isAbout ? useLoader(TextureLoader, '/profile.jpg') : ''
     const { viewport, camera } = useThree()
     const { nodes } = useGLTF('/fck_off_keycap.glb')
     const [speed] = useState(() => 0.1 + Math.random() / 10)
@@ -19,7 +24,7 @@ function KeyCap (...props) {
         const bounds = viewport.getCurrentViewport(camera, [0, 0, z])
         return [THREE.MathUtils.randFloatSpread(bounds.width), THREE.MathUtils.randFloatSpread(bounds.height * 0.75), z]
       }, [viewport])
-    const material = new THREE.MeshPhysicalMaterial({metalness:0.9, roughness:0.25, wireframe:false})
+    const material = new THREE.MeshPhysicalMaterial({metalness:isAbout ? 0 : 0.9, roughness:0.25, wireframe:false, map:colorMap})
       return (
         <Float position={position} speed={speed} rotationIntensity={randomIntFromInterval(10,100)} floatIntensity={randomIntFromInterval(30,100)} dispose={null}>
             <group dispose={null}>

@@ -4,8 +4,8 @@ import { text, curve, translate } from '@/components/curve/anim';
 import { useRouter } from 'next/router';
 
 const routes = {
-    "/": "Home",
-    "/about": "About",
+    "/": "🏠 welcome",
+    "/about": "🧑‍💻 hello, it's me",
     "/contact": "Contact"
 }
 
@@ -39,10 +39,6 @@ export default function Curve({children, backgroundColor}) {
         return () => window.removeEventListener("resize", resize)
     }, [])
 
-    console.log('dimensions', dimensions)
-
-
-
     return (
         <div className='page curve' style={{backgroundColor}}>
             <div style={{opacity: dimensions.width == null ? 1 : 0}} className='background'/>
@@ -57,7 +53,7 @@ export default function Curve({children, backgroundColor}) {
     )
 }
 
-const SVG = ({width, height}) => {
+const SVG = ({height, width}) => {
     const initialPath = `
         M0 300 
         Q${width/2} 0 ${width} 300

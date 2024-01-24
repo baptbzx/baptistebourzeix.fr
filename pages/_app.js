@@ -11,8 +11,10 @@ export default function MyApp({Component, pageProps}) {
     });
 
     return (
+        <AnimatePresence mode="wait">
             <div key={router.pathname}>
                 <Component {...pageProps} />
             </div>
+        </AnimatePresence>
     )
 }
