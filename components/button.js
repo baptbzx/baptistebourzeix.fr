@@ -1,28 +1,27 @@
 import * as THREE from 'three'
 import { useEffect, useRef, useState } from 'react'
-import { Text, useCursor } from '@react-three/drei'
+import { Text, Html, useCursor } from '@react-three/drei'
 import { useThree, useFrame } from '@react-three/fiber'
 import { easing } from 'maath'
 import { useRouter } from 'next/router'
+//import { useRouter, useLocation } from 'wouter'
 
 export default function Button({children, ...props}) {
+    const router = useRouter()
     const ref = useRef()
     const sphere = useRef()
     const { width } = useThree((state) => state.viewport)
     const [hovered, hover] = useState(false)
     const [clicked, setClicked] = useState(false)
-    const p = new THREE.Vector3
-    const router = useRouter()
     useCursor(hovered)
-    
+    // const [location, setLocation] = useLocation();
+    const [about, isAbout] = useState(false)
+
+
     useFrame((state, dt) => {
-        
-        //console.log('sphere', new THREE.Vector3(state.mouse.x / 2, state.mouse.y / 2, 10))
-        //console.log('camera', state.camera)
-        
+
         easing.damp3(sphere.current.scale, [1 * (hovered ? 1 : 0), 1 * (hovered ? 1 : 0), 1 * (hovered ? 1 : 0)], 0.1, dt)
         easing.damp3(state.camera.position, [state.camera.position.x, state.camera.position.y, clicked ? -6 : 10], 0.4, dt)
-        //vec.set((state.pointer.x * state.viewport.width) / 2, (state.pointer.y * state.viewport.height) / 2, 0)
         sphere.current.position.setX((state.pointer.x * state.viewport.width) / 2)
         sphere.current.position.setY(((state.pointer.y * state.viewport.height) / 2) -0.9)
         sphere.current.position.setZ(-6)
@@ -41,7 +40,6 @@ export default function Button({children, ...props}) {
             ref={ref} 
             onPointerOver={(e) => (hover(true))}
             onPointerOut={() => hover(false)}
-            onClick={handleClick}
         >
             <mesh ref={sphere}>
                 <sphereGeometry 
@@ -55,22 +53,18 @@ export default function Button({children, ...props}) {
                     wireframe={true} 
                 />
             </mesh>
-            <Text 
+            <Text
                 position={[-0.03, -1.9, -5]}
-                transform 
+                transform
                 lineHeight={1}
                 font="/AHAMONO-Regular.ttf"
                 fontSize={width / 44}
                 material-toneMapped={true}
+                onClick={(e) => (e.stopPropagation(), router.replace('/about'))}
             >
                 {children}
+
             </Text>
         </group>
     )
-
-    function handleClick() {
-    setClicked(true)
-    console.log('setClicked')
 }
-}
-

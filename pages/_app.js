@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
-import Layout from "../components/layout";
-import '../styles/globals.css'
+import React, {useEffect} from 'react';
+import {useRouter} from 'next/router'
+import {motion, AnimatePresence} from 'framer-motion';
+import '../styles/globals.css';
 
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({Component, pageProps}) {
+    const router = useRouter();
+
     useEffect(() => {
         document.body.className = 'bg-white font-cartograph';
     });
 
     return (
-        <Layout>
-            <Component {...pageProps} />
-        </Layout>
+            <div key={router.pathname}>
+                <Component {...pageProps} />
+            </div>
     )
 }

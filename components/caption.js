@@ -8,8 +8,9 @@ export default function Caption({ children }) {
         <Text
             anchorX="center"
             anchorY="center"
+            position={[0, 1, -10]}
             transform
-            fontSize={width / 44}
+            fontSize={width / 22}
             lineHeight={1.2}
             font="/AHAMONO-Regular.ttf"
             material-toneMapped={true}
