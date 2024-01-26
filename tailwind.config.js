@@ -13,6 +13,7 @@ module.exports = {
       },
       fontFamily: {
         'cartograph': ['cartograph-cf', 'monospace'],
+        'ahamono': ['AHAMONO', 'monospace']
       },
       colors: {
         'custom-blue': '#0000C7',

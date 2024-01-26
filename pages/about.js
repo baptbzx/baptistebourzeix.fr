@@ -8,17 +8,16 @@ export default function About() {
     return (
         <>
             <Header/>
-            <motion.div className="fixed bottom-0 left-0 z-20 flex w-full">
+            <motion.div className="fixed bottom-0 left-0 z-20 flex w-full text-white">
                 <motion.div className="w-1/3 p-10">
                     <h2>Technologies</h2>
                     <p>Front-End Developmnent / WordPress / WooCommerce / Adobe Commerce / WebFlow / React / Next.Js / THREE.JS</p>
                 </motion.div>
-                <motion.div className="w-1/3 p-10">
+                <motion.div className="w-1/3 p-10 text-center">
                     <h2>Need more informations ?</h2>
-                    <p>Contact me</p>
                     <p>hello@baptiste.cool</p>
                 </motion.div>
-                <motion.div className="w-1/3 p-10">
+                <motion.div className="w-1/3 p-10 text-right">
                     <h2>Certifications</h2>
                     <p>Adobe Commerce Front-End Developer Professional</p>
                     <p>WebFlow Certified Developer</p>

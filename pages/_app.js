@@ -7,7 +7,7 @@ export default function MyApp({Component, pageProps}) {
     const router = useRouter();
 
     useEffect(() => {
-        document.body.className = 'bg-white font-cartograph';
+        document.body.className = 'bg-white font-ahamono';
     });
 
     return (
