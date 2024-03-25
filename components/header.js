@@ -1,5 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
 import { Logo } from '../components/logo'
 import Link from 'next/link'
+import Scramble from 'react-scramble'
 
 export default function Header() {
     return (
@@ -10,12 +12,44 @@ export default function Header() {
                 </Link>
             </h1>
             <div className="flex flex-col">
-                <span className="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300 mb-2">
-                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                    Available
-                </span>
-                <Link className="inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300 text-center" href="/contact">
-                    Contact Me
+                <Link 
+                    className="inline-flex items-center border border-white text-white text-xl font-medium px-5 py-1 rounded-full text-center overflow-hidden" 
+                    href="/contact"
+                >
+                    <Scramble 
+                        autoStart 
+                        text='Contact me'
+                        speed="slow"
+                        steps={[
+                            {
+                            roll: 10,
+                            text: 'Contact me',
+                            },
+                            {
+                            roll: 10,
+                            type: 'random',
+                            action: '+',
+                            },
+                            { roll: 5 },
+                            {
+                            roll: 3,
+                            type: 'random',
+                            action: '-',
+                            },
+                            { roll: 5 },
+                            {
+                            roll: 5,
+                            type: 'random',
+                            action: '+',
+                            },
+                            { roll: 5 },
+                            {
+                            roll: 20,
+                            type: 'random',
+                            action: '-',
+                            },
+                        ]}
+                    />
                 </Link>
             </div>
         </header>

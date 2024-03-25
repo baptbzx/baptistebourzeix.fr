@@ -4,7 +4,6 @@ import { Text, Html, useCursor } from '@react-three/drei'
 import { useThree, useFrame } from '@react-three/fiber'
 import { easing } from 'maath'
 import { useRouter } from 'next/router'
-//import { useRouter, useLocation } from 'wouter'
 
 export default function Button({children, ...props}) {
     const router = useRouter()
@@ -14,7 +13,6 @@ export default function Button({children, ...props}) {
     const [hovered, hover] = useState(false)
     const [clicked, setClicked] = useState(false)
     useCursor(hovered)
-    // const [location, setLocation] = useLocation();
     const [about, isAbout] = useState(false)
 
 
@@ -27,10 +25,6 @@ export default function Button({children, ...props}) {
         sphere.current.position.setZ(-6)
         sphere.current.rotation.y += 0.01;
         sphere.current.rotation.x += 0.01;
-
-        //clicked ? state.camera.position.setZ(-6) : state.camera.position.setZ(10);
-
-        //console.log('clicked', clicked)
       })
       useEffect(() => {
         document.body.style.cursor = hovered ? `none` : `auto`
